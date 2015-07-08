@@ -64,5 +64,5 @@ if __name__ == '__main__':
         result = wordseg(args.text.decode('utf-8'), segdict)
     showresult = result[0]
     for i in result[1:]:
-        showresult += '/'+i
+        showresult += '|||'+i
     print showresult
