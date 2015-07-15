@@ -3,6 +3,7 @@ import json
 import os
 import argparse
 import platform
+import codecs
 
 def addpharse(phrase, segdict):
     #print phrase
@@ -56,13 +57,23 @@ def wordseg(text, segdict):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('text')
+    parser.add_argument('-f', '--file', action="store_true")
+    parser.add_argument('-o', '--outputfile', action="store", default = '')
     args = parser.parse_args()
     segdict = makedict('phrasetext.txt')
-    if platform.system() == 'Windows':
-        result = wordseg(args.text.decode('GBK'), segdict)
+    if args.file:
+        textinput = open(args.text, 'rb').read()
     else:
-        result = wordseg(args.text.decode('utf-8'), segdict)
+        textinput = args.text
+    if platform.system() == 'Windows':
+        result = wordseg(textinput.decode('GBK'), segdict)
+    else:
+        result = wordseg(textinput.decode('utf-8'), segdict)
     showresult = result[0]
     for i in result[1:]:
         showresult += ' '+i
     print showresult
+    if args.outputfile:
+        output = codecs.open(args.outputfile, 'wb', 'utf-8')
+        output.write(showresult)
+        output.close()
