@@ -62,18 +62,19 @@ if __name__ == '__main__':
     args = parser.parse_args()
     segdict = makedict('phrasetext.txt')
     if args.file:
-        textinput = open(args.text, 'rb').read()
+        textinput = open(args.text, 'rb').read().split('\n')
+        if platform.system() == 'Windows':
+            result = '\n'.join([' '.join(wordseg(text.decode('GBK'), segdict)) for text in textinput])
+        else:
+            result = wordseg(textinput.decode('utf-8'), segdict)
     else:
         textinput = args.text
-    if platform.system() == 'Windows':
-        result = wordseg(textinput.decode('GBK'), segdict)
-    else:
-        result = wordseg(textinput.decode('utf-8'), segdict)
-    showresult = result[0]
-    for i in result[1:]:
-        showresult += ' '+i
-    print showresult
+        if platform.system() == 'Windows':
+            result = ' '.join(wordseg(textinput.decode('GBK'), segdict))
+        else:
+            result = ' '.join(wordseg(textinput.decode('utf-8'), segdict))
+    print result
     if args.outputfile:
         output = codecs.open(args.outputfile, 'wb', 'utf-8')
-        output.write(showresult)
+        output.write(result)
         output.close()
