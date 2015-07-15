@@ -66,7 +66,7 @@ if __name__ == '__main__':
         if platform.system() == 'Windows':
             result = '\n'.join([' '.join(wordseg(text.decode('GBK'), segdict)) for text in textinput])
         else:
-            result = wordseg(textinput.decode('utf-8'), segdict)
+            result = '\n'.join([' '.join(wordseg(text.decode('utf-8'), segdict)) for text in textinput])
     else:
         textinput = args.text
         if platform.system() == 'Windows':
